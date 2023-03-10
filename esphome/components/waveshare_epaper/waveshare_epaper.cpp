@@ -1463,6 +1463,10 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
     byte = ~(morton1(word>>1));
     this->data( (byte));
   }
+  this->send_lut_base();
+  this->command(0x12);
+  delay(100);  // NOLINT
+  this->wait_until_idle_();
 
   // COMMAND DATA START TRANSMISSION old data
   this->command(0x10);
