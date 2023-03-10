@@ -371,6 +371,22 @@ class WaveshareEPaper7P5InV2alt : public WaveshareEPaper7P5InV2 {
   };
 };
 
+class WaveshareEPaper7P5InV2GrayScale : public WaveshareEPaper7P5InV2 {
+ public:
+  void initialize() override;
+
+  void fill(Color color) override;
+  
+  void draw_absolute_pixel_internal(int x, int y, Color color) override;
+
+  void display() override;
+
+  void dump_config() override;
+
+ protected:
+  uint32_t get_buffer_length_();
+};
+
 class WaveshareEPaper7P5InHDB : public WaveshareEPaper {
  public:
   void initialize() override;
