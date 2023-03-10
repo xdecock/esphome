@@ -1410,22 +1410,20 @@ Color display description
 ****************/
 void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   uint32_t buf_len = this->get_buffer_length_gs();
+  uint8_t byte;
   ESP_LOGI("ws_epaper", "buf_len: %d", buf_len);
   // COMMAND DATA START TRANSMISSION old data
   this->command(0x10);
-  delay(2);
-  uint8_t byte;
   for (uint32_t i = 0; i < buf_len; i++) {
     byte = ~(this->buffer_[i]);
-    this->data((byte&0xAA)>>1);
+    this->data( (byte>>1) & 0xAA);
   }
 
   // command data start transmission new data
   this->command(0x13);
-  delay(2);
   for (uint32_t i = 0; i < buf_len; i++) {
     byte = ~(this->buffer_[i]);
-    this->data(byte&0x55);
+    this->data( byte & 0x55 );
   }
 
 
