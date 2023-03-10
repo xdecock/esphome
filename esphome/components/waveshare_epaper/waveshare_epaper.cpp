@@ -1385,7 +1385,7 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   // COMMAND DATA START TRANSMISSION old data
   this->command(0x10);
   delay(2);
-  uint8 byte;
+  uint8_t byte;
   for (uint32_t i = 0; i < buf_len; i++) {
     byte = ~(this->buffer_[i]);
     this->data(byte&0xAA | byte&0xAA<<1);
@@ -1433,8 +1433,8 @@ void HOT WaveshareEPaper7P5InV2GrayScale::draw_absolute_pixel_internal(int x, in
     return;
 
   const uint32_t pos = (x + y * this->get_width_internal()) / 4u;
-  const uint8 subpos = x & 0x03;
-  uint8 grayscale = color.w;
+  const uint8_t subpos = x & 0x03;
+  uint8_t grayscale = color.w;
   if (!color.w) {
     grayscale = GREY(color.r, color.g, color.b);
   }
