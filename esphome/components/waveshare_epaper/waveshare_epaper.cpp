@@ -1402,6 +1402,12 @@ void WaveshareEPaper7P5InV2GrayScale::send_lut11() {
   this->transmit_lut(0x25, lut_ww11_t_i_n5_v2_gs, 42);
 }
 
+/********
+Color display description
+      white  gray1  gray2  black
+0x10|  01     01     00     00
+0x13|  01     00     01     00
+****************/
 void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   uint32_t buf_len = this->get_buffer_length_gs();
   ESP_LOGI("ws_epaper", "buf_len: %d", buf_len);
@@ -1411,7 +1417,7 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   uint8_t byte;
   for (uint32_t i = 0; i < buf_len; i++) {
     byte = ~(this->buffer_[i]);
-    this->data(byte&0xAA | byte&0xAA>>1);
+    this->data((byte&0xAA)>>1);
   }
 
   // command data start transmission new data
@@ -1419,7 +1425,7 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   delay(2);
   for (uint32_t i = 0; i < buf_len; i++) {
     byte = ~(this->buffer_[i]);
-    this->data(byte&0x55 | byte&0x55<<1);
+    this->data(byte&0x55);
   }
 
 
