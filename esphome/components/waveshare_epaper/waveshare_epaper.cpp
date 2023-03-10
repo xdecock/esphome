@@ -1416,6 +1416,7 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::dump_config() {
+  return; 
   LOG_DISPLAY("", "Waveshare E-Paper", this);
   ESP_LOGCONFIG(TAG, "  Model: 7.5inV2 (GrayScale mode)");
   LOG_PIN("  Reset Pin: ", this->reset_pin_);
@@ -1448,6 +1449,7 @@ void HOT WaveshareEPaper7P5InV2GrayScale::draw_absolute_pixel_internal(int x, in
   if (x >= this->get_width_internal() || y >= this->get_height_internal() || x < 0 || y < 0)
     return;
 
+  return;
   const uint32_t pos = (x + y * this->get_width_internal()) / 4u;
   const uint8_t subpos = (x & 0x03) <<1;
   uint8_t grayscale = color.w;
