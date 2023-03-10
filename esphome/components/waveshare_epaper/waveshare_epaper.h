@@ -385,7 +385,7 @@ class WaveshareEPaper7P5InV2GrayScale : public WaveshareEPaper7P5InV2 {
   void dump_config() override;
 
   void setup() override {
-    this->setup_pins_gs();
+    this->setup_pins_gs_();
     this->initialize();
   }
 
