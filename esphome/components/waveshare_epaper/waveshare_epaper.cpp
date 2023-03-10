@@ -1337,15 +1337,8 @@ void WaveshareEPaper7P5InV2GrayScale::initialize() {
   this->command(0x50);//VCOM AND DATA INTERVAL SETTING
   this->data(0x10); //10:KW(0--1)  21:KW(1--0)
   this->data(0x07);
-  ESP_LOGD("wsgs", "Init Done");
 
   this->wait_until_idle_();
-
-  ESP_LOGD("wsgs", "sendLut");
-  delay(300);
-  this->send_lut11();
-  ESP_LOGD("wsgs", "Lut Done");
-  delay(300);
 }
 
 void WaveshareEPaper7P5InV2GrayScale::transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count) {
@@ -1426,6 +1419,8 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
     this->data( byte & 0x55 );
   }
 
+
+  this->send_lut11();
 
   // COMMAND DISPLAY REFRESH
   this->command(0x12);
