@@ -392,6 +392,8 @@ class WaveshareEPaper7P5InV2GrayScale : public WaveshareEPaper7P5InV2 {
  protected:
   uint32_t get_buffer_length_gs();
 
+  void send_lut_base();
+
   void send_lut11();
 
   void transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count);
