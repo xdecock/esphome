@@ -1431,6 +1431,7 @@ uint32_t WaveshareEPaper7P5InV2GrayScale::get_buffer_length_() { return this->ge
 #define GREY(r, g, b) round(LUMA_REC709(r, g, b))
 
 void WaveshareEPaper7P5InV2GrayScale::fill(Color color) {
+  return;
   // flip logic
   uint8_t grayscale = color.w;
   if (grayscale == 0) { 
@@ -1506,9 +1507,6 @@ void WaveshareEPaper7P5InBC::initialize() {
   // COMMAND FLASH MODE
   this->command(0xE5);
   this->data(0x03);
-
-  ESP_LOGD("wsgs", "Init");
-  delay(300);
 }
 
 void HOT WaveshareEPaper7P5InBC::display() {
