@@ -1285,6 +1285,7 @@ void WaveshareEPaper7P5InV2alt::dump_config() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::initialize() {
+  return;
   ESP_LOGD("wsgs", "Init");
   delay(300);
   this->reset_();
