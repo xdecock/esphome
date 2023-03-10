@@ -1387,6 +1387,7 @@ void WaveshareEPaper7P5InV2GrayScale::send_lut11() {
 }
 
 void HOT WaveshareEPaper7P5InV2GrayScale::display() {
+  return;
   uint32_t buf_len = this->get_buffer_length_();
   // COMMAND DATA START TRANSMISSION old data
   this->command(0x10);
