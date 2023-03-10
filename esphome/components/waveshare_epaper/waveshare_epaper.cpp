@@ -1301,7 +1301,6 @@ void WaveshareEPaper7P5InV2GrayScale::setup_pins_gs_() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::initialize() {
-  return;
   ESP_LOGD("wsgs", "Init");
   delay(300);
   this->reset_();
@@ -1350,7 +1349,6 @@ void WaveshareEPaper7P5InV2GrayScale::initialize() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count) {
-  return;
   this->command(lut_command);
   uint8_t count;
   for (count = 0; count < lut_bytes_count; count++)
@@ -1405,7 +1403,6 @@ void WaveshareEPaper7P5InV2GrayScale::send_lut11() {
 }
 
 void HOT WaveshareEPaper7P5InV2GrayScale::display() {
-  return;
   uint32_t buf_len = this->get_buffer_length_gs();
   // COMMAND DATA START TRANSMISSION old data
   this->command(0x10);
@@ -1432,7 +1429,6 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::dump_config() {
-  return; 
   LOG_DISPLAY("", "Waveshare E-Paper", this);
   ESP_LOGCONFIG(TAG, "  Model: 7.5inV2 (GrayScale mode)");
   LOG_PIN("  Reset Pin: ", this->reset_pin_);
@@ -1448,7 +1444,6 @@ uint32_t WaveshareEPaper7P5InV2GrayScale::get_buffer_length_gs() { return this->
 #define GREY(r, g, b) round(LUMA_REC709(r, g, b))
 
 void WaveshareEPaper7P5InV2GrayScale::fill(Color color) {
-  return;
   // flip logic
   uint8_t grayscale = color.w;
   if (grayscale == 0) { 
