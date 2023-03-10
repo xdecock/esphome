@@ -1428,12 +1428,13 @@ void WaveshareEPaper7P5InV2GrayScale::dump_config() {
 uint32_t WaveshareEPaper7P5InV2GrayScale::get_buffer_length_() { return this->get_width_internal() * this->get_height_internal() / 4u; }
 
 #define LUMA_REC709(r, g, b)    (0.2126F * r + 0.7152F * g + 0.0722F * b)
-#define GREY(r, g, b) round(LUMA_REC709(r, g, b) + 0.5F)
+#define GREY(r, g, b) round(LUMA_REC709(r, g, b))
 
 void WaveshareEPaper7P5InV2GrayScale::fill(Color color) {
   // flip logic
   uint8_t grayscale = color.w;
-  if (!color.w) {
+  if (grayscale == 0) { 
+    // either black (and grey should convey black) or no white
     grayscale = GREY(color.r, color.g, color.b);
   }
   uint8_t fill = grayscale&0xB0 | (grayscale&0xB0 >>2) | (grayscale&0xB0 >> 4) | (grayscale&0xB0 >> 6);
