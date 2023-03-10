@@ -1285,44 +1285,51 @@ void WaveshareEPaper7P5InV2alt::dump_config() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::initialize() {
-    this->reset_();
+  ESP_LOGD("wsgs", "Init");
+  delay(300);
+  this->reset_();
 
-    this->command(0x01);//POWER SETTING
-    this->data(0x07);
-    this->data(0x17);
-    this->data(0x17);
-    this->data(0x3f);
-    this->data(0x3f);
+  this->command(0x01);//POWER SETTING
+  this->data(0x07);
+  this->data(0x17);
+  this->data(0x17);
+  this->data(0x3f);
+  this->data(0x3f);
 
-    this->command(0x04);//POWER ON
-    this->wait_until_idle_();
+  this->command(0x04);//POWER ON
+  this->wait_until_idle_();
 
-    this->command(0x00);//PANNEL SETTING
-    this->data(0xbf);  //KW-Bf   KWR-AF	BWROTP 0f	BWOTP 1f
-    this->command(0x30); //PLL setting
-    this->data(0x06); 	//50hz 
+  this->command(0x00);//PANNEL SETTING
+  this->data(0xbf);  //KW-Bf   KWR-AF	BWROTP 0f	BWOTP 1f
+  this->command(0x30); //PLL setting
+  this->data(0x06); 	//50hz 
 
-    this->command(0x61);  // COMMAND RESOLUTION SETTING
-    this->data(0x03);     // width: 800
-    this->data(0x20);
-    this->data(0x01);     // height: 480
-    this->data(0xE0);    
+  this->command(0x61);  // COMMAND RESOLUTION SETTING
+  this->data(0x03);     // width: 800
+  this->data(0x20);
+  this->data(0x01);     // height: 480
+  this->data(0xE0);    
 
 
-    this->command(0x15);
-    this->data(0x00);
-    this->command(0x60);//TCON SETTING
-    this->data(0x22);
-    this->command(0x82);//vcom_DC setting
-    this->data(0x12);
+  this->command(0x15);
+  this->data(0x00);
+  this->command(0x60);//TCON SETTING
+  this->data(0x22);
+  this->command(0x82);//vcom_DC setting
+  this->data(0x12);
 
-    this->command(0x50);//VCOM AND DATA INTERVAL SETTING
-    this->data(0x10); //10:KW(0--1)  21:KW(1--0)
-    this->data(0x07);
+  this->command(0x50);//VCOM AND DATA INTERVAL SETTING
+  this->data(0x10); //10:KW(0--1)  21:KW(1--0)
+  this->data(0x07);
+  ESP_LOGD("wsgs", "Init Done");
 
-    this->wait_until_idle_();
+  this->wait_until_idle_();
 
-    this->send_lut11();
+  ESP_LOGD("wsgs", "sendLut");
+  delay(300);
+  this->send_lut11();
+  ESP_LOGD("wsgs", "Lut Done");
+  delay(300);
 }
 
 void WaveshareEPaper7P5InV2GrayScale::transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count) {
@@ -1417,22 +1424,27 @@ void WaveshareEPaper7P5InV2GrayScale::dump_config() {
 // We need 2 bit per pixel as the display support 4 level of gray
 uint32_t WaveshareEPaper7P5InV2GrayScale::get_buffer_length_() { return this->get_width_internal() * this->get_height_internal() / 4u; }
 
-void WaveshareEPaper7P5InV2GrayScale::fill(Color color) {
-  // flip logic
-  const uint8_t fill = color.is_on() ? 0x00 : 0xFF;
-  for (uint32_t i = 0; i < this->get_buffer_length_(); i++)
-    this->buffer_[i] = fill;
-}
-
 #define LUMA_REC709(r, g, b)    (0.2126F * r + 0.7152F * g + 0.0722F * b)
 #define GREY(r, g, b) round(LUMA_REC709(r, g, b) + 0.5F)
+
+void WaveshareEPaper7P5InV2GrayScale::fill(Color color) {
+  // flip logic
+  uint8_t grayscale = color.w;
+  if (!color.w) {
+    grayscale = GREY(color.r, color.g, color.b);
+  }
+  uint8_t fill = grayscale&0xB0 | (grayscale&0xB0 >>2) | (grayscale&0xB0 >> 4) | (grayscale&0xB0 >> 6);
+  uint32_t buflen = this->get_buffer_length_();
+  for (uint32_t i = 0; i < buflen; i++)
+    this->buffer_[i] = fill;
+}
 
 void HOT WaveshareEPaper7P5InV2GrayScale::draw_absolute_pixel_internal(int x, int y, Color color) {
   if (x >= this->get_width_internal() || y >= this->get_height_internal() || x < 0 || y < 0)
     return;
 
   const uint32_t pos = (x + y * this->get_width_internal()) / 4u;
-  const uint8_t subpos = x & 0x03;
+  const uint8_t subpos = (x & 0x03) <<1;
   uint8_t grayscale = color.w;
   if (!color.w) {
     grayscale = GREY(color.r, color.g, color.b);
@@ -1490,6 +1502,9 @@ void WaveshareEPaper7P5InBC::initialize() {
   // COMMAND FLASH MODE
   this->command(0xE5);
   this->data(0x03);
+
+  ESP_LOGD("wsgs", "Init");
+  delay(300);
 }
 
 void HOT WaveshareEPaper7P5InBC::display() {
