@@ -123,6 +123,7 @@ enum WaveshareEPaperTypeBModel {
   WAVESHARE_EPAPER_4_2_IN_B_V2,
   WAVESHARE_EPAPER_7_5_IN,
   WAVESHARE_EPAPER_7_5_INV2,
+  WAVESHARE_EPAPER_7_5_INV2_GRAYSCALE,
   WAVESHARE_EPAPER_7_5_IN_B_V2,
 };
 
@@ -382,6 +383,11 @@ class WaveshareEPaper7P5InV2GrayScale : public WaveshareEPaper7P5InV2 {
   void display() override;
 
   void dump_config() override;
+
+  void setup() override {
+    this->setup_pins_();
+    this->initialize();
+  }
 
  protected:
   uint32_t get_buffer_length_();
