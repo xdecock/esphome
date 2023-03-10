@@ -1459,6 +1459,11 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   ESP_LOGI("ws_epaper", "buf_len: %d", buf_len);
   this->command(0x97);
   for (uint32_t i = 0; i < buf_len; i+=2) {
+    this->data(0xFF);
+  }
+
+  this->command(0x13);
+  for (uint32_t i = 0; i < buf_len; i+=2) {
     word = this->buffer_[i]<<8 | this->buffer_[i+1];
     byte = ~(morton1(word>>1));
     this->data( (byte));
