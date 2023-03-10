@@ -1322,7 +1322,18 @@ void WaveshareEPaper7P5InV2GrayScale::initialize() {
 
     this->wait_until_idle_();
 
+    this->send_lut11();
+}
 
+void WaveshareEPaper7P5InV2GrayScale::transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count) {
+  this->command(lut_command);
+  uint8_t count;
+  for (count = 0; count < lut_bytes_count; count++)
+    this->data(lut_bytes[count]);
+
+}
+  
+void WaveshareEPaper7P5InV2GrayScale::send_lut11() {
   //4 gray
   uint8_t lut_vcom11_t_i_n5_v2_gs[] = {
     0x00, 0x0A, 0x00, 0x00, 0x00, 0x01, 0x60, 0x14, 0x14, 0x00, 0x00, 0x01, 0x00, 0x14, 0x00, 0x00, 0x00, 0x01, 0x00, 0x13, 0x0A,
@@ -1349,35 +1360,23 @@ void WaveshareEPaper7P5InV2GrayScale::initialize() {
     0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   };
 
-  uint8_t count;  LOG_DISPLAY("", "Waveshare E-Paper", this);
-  ESP_LOGCONFIG(TAG, "  Model: 7.5inV2");
-  LOG_PIN("  Reset Pin: ", this->reset_pin_);
-  LOG_PIN("  DC Pin: ", this->dc_pin_);
-  LOG_PIN("  Busy Pin: ", this->busy_pin_);
-  LOG_UPDATE_INTERVAL(this);
-  this->command(0x20);  // VCOM
-  for (count = 0; count < 42; count++)
-    this->data(lut_vcom11_t_i_n5_v2_gs[count]);
+  // VCOM
+  this->transmit_lut(0x20, lut_vcom11_t_i_n5_v2_gs, 42);
 
-  this->command(0x21);  // ww11
-  for (count = 0; count < 42; count++)
-    this->data(lut_ww11_t_i_n5_v2_gs[count]);
+  // ww11
+  this->transmit_lut(0x21, lut_ww11_t_i_n5_v2_gs, 42);
 
-  this->command(0x22);  // bw11
-  for (count = 0; count < 42; count++)
-    this->data(lut_bw11_t_i_n5_v2_gs[count]);
+  // bw11
+  this->transmit_lut(0x22, lut_bw11_t_i_n5_v2_gs, 42);
 
-  this->command(0x23);  // wb11
-  for (count = 0; count < 42; count++)
-    this->data(lut_wb11_t_i_n5_v2_gs[count]);
+  // wb11
+  this->transmit_lut(0x23, lut_wb11_t_i_n5_v2_gs, 42);
 
-  this->command(0x24);  // bb11
-  for (count = 0; count < 42; count++)
-    this->data(lut_bb11_t_i_n5_v2_gs[count]);
+  // bb11
+  this->transmit_lut(0x24, lut_bb11_t_i_n5_v2_gs, 42);
 
-  this->command(0x25);  // ww1
-  for (count = 0; count < 42; count++)
-    this->data(lut_ww11_t_i_n5_v2_gs[count]);
+  // Not sure
+  this->transmit_lut(0x25, lut_ww11_t_i_n5_v2_gs, 42);
 }
 
 void HOT WaveshareEPaper7P5InV2GrayScale::display() {
@@ -1408,7 +1407,7 @@ void HOT WaveshareEPaper7P5InV2GrayScale::display() {
 
 void WaveshareEPaper7P5InV2GrayScale::dump_config() {
   LOG_DISPLAY("", "Waveshare E-Paper", this);
-  ESP_LOGCONFIG(TAG, "  Model: 7.5inV2GrayScale");
+  ESP_LOGCONFIG(TAG, "  Model: 7.5inV2 (GrayScale mode)");
   LOG_PIN("  Reset Pin: ", this->reset_pin_);
   LOG_PIN("  DC Pin: ", this->dc_pin_);
   LOG_PIN("  Busy Pin: ", this->busy_pin_);
