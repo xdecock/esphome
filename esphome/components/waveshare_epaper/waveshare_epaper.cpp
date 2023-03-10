@@ -1284,8 +1284,8 @@ void WaveshareEPaper7P5InV2alt::dump_config() {
   LOG_UPDATE_INTERVAL(this);
 }
 
-void WaveshareEPaper7P5InV2GrayScale::setup_pins_() {
-  this->init_internal_(this->get_buffer_length_());
+void WaveshareEPaper7P5InV2GrayScale::setup_pins_gs_() {
+  this->init_internal_(this->get_buffer_length_gs());
   this->dc_pin_->setup();  // OUTPUT
   this->dc_pin_->digital_write(false);
   if (this->reset_pin_ != nullptr) {
@@ -1406,7 +1406,7 @@ void WaveshareEPaper7P5InV2GrayScale::send_lut11() {
 
 void HOT WaveshareEPaper7P5InV2GrayScale::display() {
   return;
-  uint32_t buf_len = this->get_buffer_length_();
+  uint32_t buf_len = this->get_buffer_length_gs();
   // COMMAND DATA START TRANSMISSION old data
   this->command(0x10);
   delay(2);
@@ -1442,7 +1442,7 @@ void WaveshareEPaper7P5InV2GrayScale::dump_config() {
 }
 
 // We need 2 bit per pixel as the display support 4 level of gray
-uint32_t WaveshareEPaper7P5InV2GrayScale::get_buffer_length_() { return this->get_width_internal() * this->get_height_internal() / 4u; }
+uint32_t WaveshareEPaper7P5InV2GrayScale::get_buffer_length_gs() { return this->get_width_internal() * this->get_height_internal() / 4u; }
 
 #define LUMA_REC709(r, g, b)    (0.2126F * r + 0.7152F * g + 0.0722F * b)
 #define GREY(r, g, b) round(LUMA_REC709(r, g, b))
@@ -1456,7 +1456,7 @@ void WaveshareEPaper7P5InV2GrayScale::fill(Color color) {
     grayscale = GREY(color.r, color.g, color.b);
   }
   uint8_t fill = grayscale&0xB0 | (grayscale&0xB0 >>2) | (grayscale&0xB0 >> 4) | (grayscale&0xB0 >> 6);
-  uint32_t buflen = this->get_buffer_length_();
+  uint32_t buflen = this->get_buffer_length_gs();
   for (uint32_t i = 0; i < buflen; i++)
     this->buffer_[i] = fill;
 }
