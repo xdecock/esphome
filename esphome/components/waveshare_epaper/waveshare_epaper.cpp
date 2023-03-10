@@ -1333,6 +1333,7 @@ void WaveshareEPaper7P5InV2GrayScale::initialize() {
 }
 
 void WaveshareEPaper7P5InV2GrayScale::transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count) {
+  return;
   this->command(lut_command);
   uint8_t count;
   for (count = 0; count < lut_bytes_count; count++)
