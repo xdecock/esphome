@@ -389,6 +389,8 @@ class WaveshareEPaper7P5InV2GrayScale : public WaveshareEPaper7P5InV2 {
   void send_lut11();
 
   void transmit_lut(uint8_t lut_command, uint8_t* lut_bytes, uint8_t lut_bytes_count);
+
+  void setup_pins_();
 };
 
 class WaveshareEPaper7P5InHDB : public WaveshareEPaper {

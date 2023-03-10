@@ -1284,6 +1284,22 @@ void WaveshareEPaper7P5InV2alt::dump_config() {
   LOG_UPDATE_INTERVAL(this);
 }
 
+void WaveshareEPaper7P5InV2GrayScale::setup_pins_() {
+  this->init_internal_(this->get_buffer_length_());
+  this->dc_pin_->setup();  // OUTPUT
+  this->dc_pin_->digital_write(false);
+  if (this->reset_pin_ != nullptr) {
+    this->reset_pin_->setup();  // OUTPUT
+    this->reset_pin_->digital_write(true);
+  }
+  if (this->busy_pin_ != nullptr) {
+    this->busy_pin_->setup();  // INPUT
+  }
+  this->spi_setup();
+
+  this->reset_();
+}
+
 void WaveshareEPaper7P5InV2GrayScale::initialize() {
   return;
   ESP_LOGD("wsgs", "Init");
